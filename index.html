@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expediente 002 · Un caso llamado nosotros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=Special+Elite&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       RESET
+    ============================================================ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --amarillo: #F4C430;
+      --amarillo-suave: #F7D66E;
+      --rojo: #C41E3A;
+      --rojo-oscuro: #8B1528;
+      --crema: #FDF6E3;
+      --papel: #F2E8D5;
+      --papel-oscuro: #E8DCC0;
+      --tinta: #2C1810;
+      --marron: #5C4033;
+      --dorado: #B8860B;
+      --verde-papiro: #A8A87D;
+      --sombra: rgba(44, 24, 16, 0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: #1A0E08;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(244, 196, 48, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(196, 30, 58, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(184, 134, 11, 0.03) 0%, transparent 60%);
+      font-family: 'Lora', Georgia, serif;
+      color: var(--tinta);
+      line-height: 1.75;
+      overflow-x: hidden;
+      padding: 24px 16px 60px;
+      min-height: 100vh;
+    }
+
+    /* ============================================================
+       TEXTURA DE PAPEL REUTILIZABLE
+    ============================================================ */
+    .papel {
+      position: relative;
+      background-color: var(--papel);
+      background-image: 
+        url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      box-shadow: 
+        0 1px 2px rgba(0,0,0,0.15),
+        0 12px 40px rgba(0,0,0,0.25),
+        inset 0 0 120px rgba(92, 64, 51, 0.08);
+      border-radius: 1px;
+    }
+
+    .papel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(ellipse 300px 200px at 20% 15%, rgba(92, 64, 51, 0.06), transparent 70%),
+        radial-gradient(ellipse 400px 300px at 85% 90%, rgba(196, 30, 58, 0.03), transparent 70%);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* ============================================================
+       CONTENEDOR PRINCIPAL
+    ============================================================ */
+    .expediente {
+      max-width: 920px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* ============================================================
+       CINTAS ADHESIVAS
+    ============================================================ */
+    .cinta {
+      position: absolute;
+      width: 130px;
+      height: 30px;
+      background: linear-gradient(180deg, rgba(244, 196, 48, 0.75), rgba(244, 196, 48, 0.55));
+      box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+      z-index: 20;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .cinta::before,
+    .cinta::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 3px,
+        rgba(255,255,255,0.35) 3px,
+        rgba(255,255,255,0.35) 5px
+      );
+    }
+
+    .cinta::before { left: 0; }
+    .cinta::after { right: 0; }
+
+    .cinta.esquina-izq { top: -14px; left: -18px; transform: rotate(-6deg); }
+    .cinta.esquina-der { top: -14px; right: -18px; transform: rotate(5deg); }
+    .cinta.centro-top { top: -16px; left: 50%; transform: translateX(-50%) rotate(-1deg); }
+    .cinta.lateral { top: 45%; left: -22px; transform: rotate(-88deg); width: 110px; }
+
+    /* ============================================================
+       CABECERA
+    ============================================================ */
+    .cabecera {
+      position: relative;
+      min-height: 620px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 70px 55px 60px;
+      overflow: hidden;
+      margin-bottom: 50px;
+      border-radius: 1px;
+      box-shadow: 
+        0 1px 3px rgba(0,0,0,0.2),
+        0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    .cabecera-fondo {
+      position: absolute;
+      inset: 0;
+      background: 
+        linear-gradient(180deg, 
+          rgba(44,24,16,0.2) 0%, 
+          rgba(44,24,16,0.55) 45%, 
+          rgba(44,24,16,0.88) 80%,
+          rgba(44,24,16,0.96) 100%),
+        url('https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=1600&q=80') center/cover no-repeat;
+      z-index: 1;
+    }
+
+    /* Sello "Expediente" */
+    .sello {
+      position: absolute;
+      top: 40px;
+      right: 45px;
+      z-index: 3;
+      border: 3px double var(--rojo);
+      color: var(--rojo);
+      padding: 10px 16px;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transform: rotate(6deg);
+      background: rgba(253, 246, 227, 0.85);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .sello strong {
+      display: block;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      margin-bottom: 2px;
+    }
+
+    /* Código de barras decorativo */
+    .codigo-barras {
+      position: absolute;
+      top: 45px;
+      left: 50px;
+      z-index: 3;
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      height: 40px;
+    }
+
+    .codigo-barras span {
+      display: block;
+      width: 2px;
+      background: var(--crema);
+      opacity: 0.7;
+    }
+
+    .codigo-barras span:nth-child(1) { height: 100%; }
+    .codigo-barras span:nth-child(2) { height: 70%; }
+    .codigo-barras span:nth-child(3) { height: 100%; }
+    .codigo-barras span:nth-child(4) { height: 45%; }
+    .codigo-barras span:nth-child(5) { height: 85%; }
+    .codigo-barras span:nth-child(6) { height: 60%; }
+    .codigo-barras span:nth-child(7) { height: 100%; }
+    .codigo-barras span:nth-child(8) { height: 55%; }
+    .codigo-barras span:nth-child(9) { height: 90%; }
+    .codigo-barras span:nth-child(10) { height: 100%; }
+
+    .cabecera-contenido {
+      position: relative;
+      z-index: 2;
+      color: var(--crema);
+    }
+
+    .cabecera-contenido .etiqueta-superior {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--amarillo);
+      margin-bottom: 18px;
+      opacity: 0.95;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cabecera-contenido .etiqueta-superior::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--amarillo);
+      opacity: 0.7;
+    }
+
+    .cabecera-contenido h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 20px;
+      text-shadow: 3px 3px 12px rgba(0,0,0,0.55);
+      letter-spacing: -0.5px;
+    }
+
+    .cabecera-contenido h1 em {
+      font-style: italic;
+      color: var(--amarillo);
+      font-weight: 400;
+      display: block;
+      margin-top: 6px;
+    }
+
+    .cabecera-contenido .dedicatoria {
+      font-family: 'Caveat', cursive;
+      font-size: 1.55rem;
+      color: var(--amarillo-suave);
+      transform: rotate(-1.5deg);
+      display: inline-block;
+      margin-top: 8px;
+      border-bottom: 2px solid var(--rojo);
+      padding-bottom: 4px;
+    }
+
+    /* ============================================================
+       CONTADOR
+    ============================================================ */
+    .contador-envoltorio {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 55px;
+      position: relative;
+    }
+
+    .contador {
+      background: var(--crema);
+      border: 2px solid var(--rojo);
+      border-radius: 6px;
+      padding: 26px 50px 22px;
+      text-align: center;
+      box-shadow: 
+        6px 6px 0 var(--rojo),
+        0 8px 24px rgba(0,0,0,0.3);
+      transform: rotate(-1.2deg);
+      position: relative;
+    }
+
+    .contador::before {
+      content: '✦';
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.6rem;
+      color: var(--rojo);
+      background: var(--crema);
+      padding: 0 10px;
+    }
+
+    .contador .numero {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.8rem;
+      font-weight: 900;
+      color: var(--rojo);
+      line-height: 1;
+      display: block;
+      letter-spacing: -2px;
+    }
+
+    .contador .etiqueta {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--marron);
+      margin-top: 10px;
+      display: block;
+    }
+
+    /* ============================================================
+       CARTA PRINCIPAL
+    ============================================================ */
+    .carta {
+      padding: 60px 55px 55px;
+      margin-bottom: 55px;
+      position: relative;
+      border-left: 6px solid var(--rojo);
+    }
+
+    .carta .numero-pagina {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.75rem;
+      color: var(--marron);
+      opacity: 0.55;
+    }
+
+    .carta .capitulo {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--rojo);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .carta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem;
+      color: var(--tinta);
+      margin-bottom: 32px;
+      font-style: italic;
+      line-height: 1.2;
+    }
+
+    .carta p {
+      margin-bottom: 20px;
+      font-size: 1.06rem;
+      color: #3A2318;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .carta p.destacado {
+      font-size: 1.15rem;
+      color: var(--rojo-oscuro);
+      font-weight: 500;
+    }
+
+    /* Anotaciones al margen */
+    .anotacion {
+      position: absolute;
+      right: -40px;
+      top: 50%;
+      transform: rotate(88deg) translateX(50%);
+      transform-origin: right center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      color: var(--rojo);
+      opacity: 0.75;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    /* Cita estilo Christie */
+    .cita {
+      margin: 32px 0;
+      padding: 22px 28px 22px 62px;
+      background: rgba(244, 196, 48, 0.09);
+      border-left: 4px solid var(--amarillo);
+      position: relative;
+      font-style: italic;
+      font-size: 1.18rem;
+      color: var(--marron);
+      line-height: 1.6;
+    }
+
+    .cita::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      position: absolute;
+      top: -8px;
+      left: 12px;
+      color: var(--amarillo);
+      opacity: 0.55;
+      line-height: 1;
+    }
+
+    .cita .autor {
+      display: block;
+      font-style: normal;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #8B7355;
+      margin-top: 10px;
+    }
+
+    .firma {
+      text-align: right;
+      font-family: 'Caveat', cursive;
+      font-size: 1.55rem;
+      color: var(--rojo);
+      margin-top: 38px;
+      transform: rotate(-1.5deg);
+      display: inline-block;
+      float: right;
+      border-bottom: 1px solid var(--rojo);
+      padding-bottom: 2px;
+    }
+
+    /* ============================================================
+       SECCIÓN GUSTOS — MOODBOARD
+    ============================================================ */
+    .seccion-gustos {
+      padding: 60px 45px 50px;
+      margin-bottom: 55px;
+      position: relative;
+    }
+
+    .titulo-seccion {
+      text-align: center;
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    .titulo-seccion .etiqueta {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--rojo);
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .titulo-seccion h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      color: var(--tinta);
+      font-style: italic;
+      line-height: 1.2;
+    }
+
+    .titulo-seccion .adorno {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--amarillo);
+      font-size: 1.2rem;
+      letter-spacing: 8px;
+    }
+
+    .moodboard {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-auto-rows: 60px;
+      gap: 18px;
+    }
+
+    .pieza {
+      position: relative;
+      background: #fff;
+      padding: 10px 10px 40px;
+      box-shadow: 
+        0 2px 6px rgba(0,0,0,0.12),
+        0 10px 24px rgba(0,0,0,0.1);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+    }
+
+    .pieza:hover {
+      transform: rotate(0deg) scale(1.04) !important;
+      box-shadow: 
+        0 4px 12px rgba(0,0,0,0.2),
+        0 20px 40px rgba(0,0,0,0.18);
+      z-index: 15;
+    }
+
+    .pieza img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.95) contrast(1.02);
+    }
+
+    .pieza .texto-pieza {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 6px 8px 8px;
+      text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      color: var(--marron);
+      line-height: 1.15;
+    }
+
+    .pieza .texto-pieza small {
+      display: block;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.58rem;
+      color: #9B8873;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    /* Layout del moodboard: cada pieza ocupa espacio irregular */
+    .p-girasol     { grid-column: 1 / 3; grid-row: 1 / 5; transform: rotate(-2.5deg); }
+    .p-gato        { grid-column: 3 / 5; grid-row: 1 / 4; transform: rotate(1.8deg); }
+    .p-christie    { grid-column: 5 / 7; grid-row: 1 / 4; transform: rotate(-1.5deg); }
+    .p-publicidad  { grid-column: 1 / 3; grid-row: 5 / 8; transform: rotate(2.2deg); }
+    .p-arte        { grid-column: 3 / 5; grid-row: 4 / 7; transform: rotate(-1deg); }
+    .p-libro       { grid-column: 5 / 7; grid-row: 4 / 7; transform: rotate(1.5deg); }
+    .p-inteligente { grid-column: 1 / 3; grid-row: 7 / 10; transform: rotate(-1.8deg); }
+    .p-amorosa     { grid-column: 3 / 5; grid-row: 7 / 10; transform: rotate(1.4deg); }
+    .p-capaz       { grid-column: 5 / 7; grid-row: 7 / 10; transform: rotate(-2.1deg); }
+    .p-artista     { grid-column: 1 / 3; grid-row: 10 / 13; transform: rotate(2deg); }
+    .p-tierna      { grid-column: 3 / 5; grid-row: 10 / 13; transform: rotate(-1.2deg); }
+    .p-sexy        { grid-column: 5 / 7; grid-row: 10 / 13; transform: rotate(1.7deg); }
+    .p-egipto      { grid-column: 2 / 6; grid-row: 13 / 19; transform: rotate(-0.8deg); }
+
+    .pieza .chincheta {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #FF6B6B, #C41E3A 60%, #8B1528);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      z-index: 5;
+    }
+
+    .chincheta.amarilla {
+      background: radial-gradient(circle at 35% 30%, #FFE066, #F4C430 60%, #B8860B);
+    }
+
+    .chincheta.dorada {
+      background: radial-gradient(circle at 35% 30%, #FFD97D, #D4A017 60%, #8B6914);
+    }
+
+    /* ============================================================
+       SECCIÓN HISTORIA DE LA PUBLICIDAD + EGIPTO
+    ============================================================ */
+    .seccion-historia {
+      padding: 60px 50px 55px;
+      margin-bottom: 55px;
+      position: relative;
+      border-top: 4px double var(--dorado);
+      border-bottom: 4px double var(--dorado);
+    }
+
+    .seccion-historia .etiqueta-seccion {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--dorado);
+      text-align: center;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .seccion-historia h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 4vw, 2.5rem);
+      color: var(--tinta);
+      font-style: italic;
+      text-align: center;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .seccion-historia .subtitulo {
+      text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      color: var(--rojo);
+      margin-bottom: 45px;
+      transform: rotate(-0.8deg);
+      display: block;
+    }
+
+    /* Bloque de contenido de dos columnas */
+    .historia-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: start;
+      margin-bottom: 40px;
+    }
+
+    .historia-texto p {
+      margin-bottom: 18px;
+      font-size: 1.02rem;
+      color: #3A2318;
+      text-align: justify;
+      hyphens: auto;
+      line-height: 1.75;
+    }
+
+    .historia-texto p strong {
+      color: var(--rojo-oscuro);
+      font-weight: 600;
+    }
+
+    .bloque-papiro {
+      background: linear-gradient(180deg, rgba(184, 134, 11, 0.08), rgba(168, 168, 125, 0.12));
+      border-left: 4px solid var(--dorado);
+      padding: 22px 26px;
+      margin: 26px 0;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      color: #4A3A20;
+      position: relative;
+      border-radius: 2px;
+    }
+
+    .bloque-papiro::before {
+      content: '𓂀';
+      font-size: 1.8rem;
+      color: var(--dorado);
+      position: absolute;
+      top: -14px;
+      left: 16px;
+      background: var(--papel);
+      padding: 0 8px;
+      line-height: 1;
+    }
+
+    .bloque-papiro .traduccion {
+      display: block;
+      font-style: normal;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dorado);
+      margin-top: 12px;
+    }
+
+    /* Columna de imágenes de la sección historia */
+    .historia-imagenes {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .polaroid {
+      background: #fff;
+      padding: 12px 12px 48px;
+      box-shadow: 
+        0 3px 8px rgba(0,0,0,0.15),
+        0 12px 28px rgba(0,0,0,0.12);
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+
+    .polaroid:hover {
+      transform: scale(1.02) rotate(0deg) !important;
+    }
+
+    .polaroid:nth-child(1) { transform: rotate(1.8deg); }
+    .polaroid:nth-child(2) { transform: rotate(-2.2deg); }
+
+    .polaroid img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.9) contrast(1.05);
+    }
+
+    .polaroid .texto {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      color: var(--marron);
+      line-height: 1.2;
+    }
+
+    .polaroid .texto small {
+      display: block;
+      font-family: 'Special Elite', monospace;
+      font-size: 0.6rem;
+      color: #9B8873;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    /* Cita final de la sección */
+    .mensaje-anuncio {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.28rem;
+      font-style: italic;
+      color: var(--tinta);
+      margin-top: 30px;
+      padding: 26px 24px;
+      background: rgba(196, 30, 58, 0.04);
+      border: 1px solid rgba(196, 30, 58, 0.15);
+      border-radius: 2px;
+      line-height: 1.6;
+    }
+
+    .mensaje-anuncio strong {
+      color: var(--rojo);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       SECCIÓN DE CIERRE / FOOTER
+    ============================================================ */
+    .cierre {
+      text-align: center;
+      padding: 60px 30px 50px;
+      position: relative;
+    }
+
+    .cierre .gato-final {
+      width: 170px;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 5px solid var(--amarillo);
+      outline: 2px solid var(--rojo);
+      outline-offset: 4px;
+      box-shadow: 0 10px 32px rgba(0,0,0,0.4);
+      margin-bottom: 26px;
+      filter: saturate(0.9);
+    }
+
+    .cierre h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--crema);
+      font-style: italic;
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+
+    .cierre p {
+      color: rgba(253, 246, 227, 0.82);
+      font-size: 1rem;
+      max-width: 540px;
+      margin: 0 auto 14px;
+      line-height: 1.8;
+    }
+
+    .cierre .corazon {
+      color: var(--amarillo);
+      font-size: 3.9rem;
+      display: inline-block;
+      animation: latido 1.6s ease infinite;
+      margin: 18px 0;
+    }
+
+    @keyframes latido {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.18); }
+    }
+
+    .cierre .firma-final {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      color: var(--amarillo);
+      margin-top: 22px;
+      transform: rotate(-2deg);
+      display: inline-block;
+      border-bottom: 1px solid rgba(244, 196, 48, 0.4);
+      padding-bottom: 4px;
+    }
+
+    /* ============================================================
+       DECORACIONES — MANCHAS DE CAFÉ, NOTAS AL MARGEN
+    ============================================================ */
+    .mancha {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.65;
+    }
+
+    .mancha.a { 
+      width: 90px; height: 90px;
+      background: radial-gradient(circle, rgba(92, 64, 51, 0.15) 0%, rgba(92, 64, 51, 0.05) 55%, transparent 72%);
+      top: 40px; right: 65px;
+    }
+
+    .mancha.b {
+      width: 70px; height: 70px;
+      background: radial-gradient(circle, rgba(196, 30, 58, 0.1) 0%, rgba(196, 30, 58, 0.03) 55%, transparent 72%);
+      bottom: 50px; left: 45px;
+    }
+
+    .mancha.c {
+      width: 110px; height: 110px;
+      background: radial-gradient(circle, rgba(184, 134, 11, 0.1) 0%, transparent 70%);
+      top: 30px; left: 30%;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 780px) {
+      body { padding: 14px 10px 40px; }
+      .cabecera { padding: 50px 28px 45px; min-height: 520px; }
+      .cabecera-contenido h1 { font-size: 2.2rem; }
+      .sello { top: 20px; right: 20px; font-size: 0.65rem; padding: 6px 10px; }
+      .sello strong { font-size: 1rem; }
+      .codigo-barras { top: 25px; left: 25px; height: 30px; }
+      .carta { padding: 40px 26px 40px; }
+      .carta h2 { font-size: 1.7rem; }
+      .anotacion { display: none; }
+      .seccion-gustos { padding: 40px 22px 35px; }
+      .moodboard { 
+        grid-template-columns: 1fr 1fr; 
+        grid-auto-rows: 130px; 
+        gap: 14px;
+      }
+      .p-girasol, .p-gato, .p-christie, .p-publicidad, .p-arte, .p-libro, .p-egipto,
+      .p-inteligente, .p-amorosa, .p-capaz, .p-artista, .p-tierna, .p-sexy {
+        grid-column: auto / auto;
+        grid-row: auto / auto;
+      }
+      .p-egipto, .p-inteligente, .p-amorosa, .p-capaz, .p-artista, .p-tierna, .p-sexy {
+        grid-column: 1 / 3;
+        grid-row: auto / span 2;
+      }
+      .seccion-historia { padding: 45px 24px 40px; }
+      .historia-grid { grid-template-columns: 1fr; gap: 30px; }
+      .polaroid img { height: 180px; }
+      .cierre .gato-final { width: 130px; height: 130px; }
+      .cierre h3 { font-size: 1.4rem; }
+    }
+
+    @media (max-width: 420px) {
+      .moodboard { grid-template-columns: 1fr; }
+      .p-egipto, .p-inteligente, .p-amorosa, .p-capaz, .p-artista, .p-tierna, .p-sexy { grid-column: 1 / 2; }
+      .contador { padding: 20px 32px; }
+      .contador .numero { font-size: 3rem; }
+    }
+
+    /* ============================================================
+       ANIMACIÓN DE ENTRADA
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 1s ease, transform 1s cubic-bezier(0.2, 0.8, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<div class="expediente">
+
+  <!-- ============================================================
+       CABECERA
+  ============================================================ -->
+  <header class="cabecera reveal">
+    <div class="cabecera-fondo"></div>
+
+
+    <div class="sello">
+      <strong>EXP. 002</strong>
+      CONFIDENCIAL
+    </div>
+
+    <div class="cabecera-contenido">
+      <p class="etiqueta-superior">Caso abierto · Dossier personal</p>
+      <h1>
+        Dos meses de<br>
+        <em>un misterio maravilloso</em>
+      </h1>
+      <!-- CAMBIA ESTA FECHA POR LA VUESTRA -->
+      <span class="dedicatoria">desde el 7 de agosto</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       CONTADOR
+  ============================================================ -->
+  <section class="contador-envoltorio reveal">
+    <div class="contador">
+      <span class="numero" id="dias">0</span>
+      <span class="etiqueta">días contigo</span>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CARTA PRINCIPAL
+  ============================================================ -->
+  <article class="carta papel reveal">
+    <span class="numero-pagina">pág. ii</span>
+    <div class="mancha a"></div>
+    <span class="anotacion">— léelo despacio —</span>
+
+    <span class="capitulo">Capítulo segundo · El caso de la chica que lo cambió todo</span>
+    <h2>Hay personas que llegan para quedarse</h2>
+
+    <p>
+    <strong>contigo todo
+      tiene más sentido</strong>. Las cosas que antes eran solo cosas —un libro a medio
+      empezar, una tarde sin planes, un café que se enfría mientras hablamos— contigo
+      se vuelven escenas que atesoro con mi alma.
+    </p>
+
+    <p>
+      Me impresiona tu cabeza. De verdad. La forma en que piensas, en que unes ideas
+      que yo jamás habría relacionado, en que te detienes en los detalles que otros
+      pasan por alto. Escucharte razonar es una de mis cosas favoritas del mundo, y
+      eso no lo digo por decir. Lo digo porque cada vez que lo haces aprendo algo,
+      aunque sea sobre ti, aunque sea sobre mí.
+    </p>
+
+    <p class="destacado">
+      Y luego está tu forma de querer. Que es tranquila, pero firme. Que no necesita
+      grandilocuencia porque se nota en lo pequeño: en cómo preguntas si comí, en cómo
+      te acuerdas de lo que dije una vez sin darle importancia, en cómo me miras cuando
+      crees que no me doy cuenta. <strong>Me haces inmensamente feliz mi reina hermosa.</strong> Y no
+      es una frase bonita: es un hecho que compruebo cada día.
+    </p>
+
+    <p>
+      Sé que dos meses no son una vida. Pero son suficientes para saber que este caso
+      no se cierra. Que no quiero que se cierre. Que me gusta la persona que soy cuando
+      estoy contigo, y me gusta todavía más la persona que eres tú.
+    </p>
+
+    <div class="cita">
+      «Para todo lo que amas, tienes que pagar un precio.»
+      <span class="autor">— Agatha Christie</span>
+    </div>
+
+    <p>
+      Y si tengo que pagar el precio por amarte lo pagare con gusto —estoy dispuesto a morir por ti de ser necesario. Porque no hay nada que me haga más feliz que verte sonreír, y no hay nada que me haga más feliz que estar a tu lado.Llenas mi vida de luz y alegría, y cada día contigo es un regalo que atesoro con todo mi corazón.
+    </p>
+
+    <span class="firma">— tuyo, siempre un poco más</span>
+    <div style="clear:both"></div>
+  </article>
+
+  <!-- ============================================================
+       SECCIÓN GUSTOS — MOODBOARD
+  ============================================================ -->
+  <section class="seccion-gustos papel reveal">
+    <div class="mancha b"></div>
+    <div class="titulo-seccion">
+      <span class="etiqueta">Inventario de pequeñas obsesiones</span>
+      <h2>Las cosas que te hacen ser tú</h2>
+      <span class="adorno">✦ ✦ ✦</span>
+    </div>
+
+    <div class="moodboard">
+
+      <!-- GIRASOLES -->
+      <div class="pieza p-girasol">
+        <span class="chincheta amarilla"></span>
+        <img src="https://i.pinimg.com/736x/5e/81/02/5e81029181eec3ca37a43ec57bcfc82d.jpg" alt="Campo de girasoles" loading="lazy">
+        <div class="texto-pieza">
+          Girasoles
+          <small>porque giras hacia la luz</small>
+        </div>
+      </div>
+
+      <!-- GATO NEGRO -->
+      <div class="pieza p-gato">
+        <span class="chincheta"></span>
+        <img src="https://i.pinimg.com/736x/71/63/0c/71630c0560798116dba3a82dac4a9f94.jpg" alt="Gato negro" loading="lazy">
+        <div class="texto-pieza">
+          Gatos
+          <small>elegantes y con misterio</small>
+        </div>
+      </div>
+
+      <!-- AGATHA CHRISTIE -->
+      <div class="pieza p-christie">
+        <span class="chincheta dorada"></span>
+        <img src="https://i.pinimg.com/736x/f0/cc/75/f0cc7550bf9120d51b2518297c2c911e.jpg" alt="Portada de Agatha Christie" loading="lazy" style="object-fit:contain;">
+        <div class="texto-pieza">
+          Agatha Christie
+          <small>la reina del misterio</small>
+        </div>
+      </div>
+
+      <!-- PUBLICIDAD -->
+      <div class="pieza p-publicidad">
+        <span class="chincheta amarilla"></span>
+        <img src="https://i.pinimg.com/736x/1c/ae/07/1cae077e621916a1b4c7e4f936749e29.jpg" alt="Publicidad moderna" loading="lazy">
+        <div class="texto-pieza">
+          Publicidad
+          <small>el arte de un instante</small>
+        </div>
+      </div>
+
+      <!-- ARTE -->
+      <div class="pieza p-arte">
+        <span class="chincheta"></span>
+        <img src="https://i.pinimg.com/736x/f7/ca/ad/f7caade73d0e6233736f21922f2dc7d2.jpg" alt="Arte" loading="lazy">
+        <div class="texto-pieza">
+          Arte
+          <small>ves belleza donde otros no</small>
+        </div>
+      </div>
+
+      <!-- LECTURA -->
+      <div class="pieza p-libro">
+        <span class="chincheta dorada"></span>
+        <img src="https://i.pinimg.com/1200x/38/fd/bd/38fdbdbb0a8170ea4d4c4f250e5b66d4.jpg" alt="Libros" loading="lazy">
+        <div class="texto-pieza">
+          Lectura
+          <small>páginas que huelen a historia</small>
+        </div>
+      </div>
+
+      <!-- INTELIGENTE -->
+      <div class="pieza p-inteligente">
+        <span class="chincheta dorada"></span>
+        <img src="https://i.pinimg.com/736x/7f/17/0f/7f170fbc0fe4117d52f5332d9b403993.jpg" alt="Mente brillante" loading="lazy">
+        <div class="texto-pieza">
+          Inteligente
+          <small>tu mente me sorprende cada día</small>
+        </div>
+      </div>
+
+      <!-- AMOROSA -->
+      <div class="pieza p-amorosa">
+        <span class="chincheta"></span>
+        <img src="https://i.pinimg.com/736x/f6/3b/06/f63b061f1ac99039d9012eaab46bec89.jpg" alt="Amor y ternura" loading="lazy">
+        <div class="texto-pieza">
+          Amorosa
+          <small>con un cariño que se siente</small>
+        </div>
+      </div>
+
+      <!-- CAPAZ -->
+      <div class="pieza p-capaz">
+        <span class="chincheta amarilla"></span>
+        <img src="https://i.pinimg.com/736x/b6/be/2a/b6be2af9f5508bb486b2c24a9865a9ae.jpg" alt="Trabajo en equipo" loading="lazy">
+        <div class="texto-pieza">
+          Capaz
+          <small>de hacer lo imposible con calma</small>
+        </div>
+      </div>
+
+      <!-- ARTISTA -->
+      <div class="pieza p-artista">
+        <span class="chincheta dorada"></span>
+        <img src="https://i.pinimg.com/736x/5f/53/67/5f5367a73beac281af9e66b1f80c7ac0.jpg" alt="Arte creativo" loading="lazy">
+        <div class="texto-pieza">
+          Artista
+          <small>porque ves belleza donde nadie más</small>
+        </div>
+      </div>
+
+      <!-- TIERNA -->
+      <div class="pieza p-tierna">
+        <span class="chincheta"></span>
+        <img src="https://i.pinimg.com/736x/47/06/88/470688a1221eaa63f7dc2d6d7730ece3.jpg" alt="Ternura" loading="lazy">
+        <div class="texto-pieza">
+          Tierna
+          <small>con ese modo de cuidar sin esfuerzo</small>
+        </div>
+      </div>
+
+      <!-- SEXY -->
+      <div class="pieza p-sexy">
+        <span class="chincheta amarilla"></span>
+        <img src="https://i.pinimg.com/736x/a1/30/b6/a130b65da6c563ea067df70ef84c95ea.jpg" alt="Sensualidad elegante" loading="lazy">
+        <div class="texto-pieza">
+          Sexy
+          <small>natural, intensa y sin pretenderlo</small>
+        </div>
+      </div>
+
+      <!-- EGIPTO -->
+      <div class="pieza p-egipto">
+        <span class="chincheta amarilla"></span>
+        <img src="https://i.pinimg.com/736x/de/0a/c1/de0ac12e5198e7239f008a1dc0a9a7ee.jpg" alt="Pirámides de Egipto" loading="lazy">
+        <div class="texto-pieza">
+          Egipto
+          <small>3.000 años de misterio bajo el sol del Nilo</small>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECCIÓN HISTORIA DE LA PUBLICIDAD + EGIPTO
+  ============================================================ -->
+  <section class="seccion-historia papel reveal">
+    <div class="mancha c"></div>
+
+    <span class="etiqueta-seccion">Un caso con historia</span>
+    <h2>El primer anuncio de la humanidad se escribió en Egipto</h2>
+    <span class="subtitulo">— y desde entonces no hemos dejado de contar historias —</span>
+
+    <div class="historia-grid">
+
+      <div class="historia-texto">
+        <p>
+          Antes de las vallas luminosas, antes de los carteles minimalistas,
+          antes incluso de la imprenta, ya había alguien en Egipto intentando
+          que otro le prestara atención. Ocurrió en Tebas, hace más de 3.000
+          años, sobre un papiro que hoy se conserva —casi milagrosamente— en
+          el Museo Británico. En él, un comerciante ofrecía una recompensa por
+          la devolución de un esclavo fugitivo llamado Shem. Es el
+          <strong>papiro de Hapu</strong>: el primer anuncio publicitario
+          documentado de la historia.
+        </p>
+
+        <div class="bloque-papiro">
+          «El tejedor Hapu, de la ribera del Nilo, hace saber a todos los
+          habitantes de Tebas que ha tejido las más bellas telas al gusto de
+          cada uno. Que vengan a verlas y comparen.»
+          <span class="traduccion">— Reclamo publicitario egipcio, c. 1000 a.C.</span>
+        </div>
+
+        <p>
+          Siglos después, los griegos lo llamaron <em>axones</em>, los romanos
+          lo convirtieron en <em>álbum</em>, y en el siglo XIX los carteles
+          litografiados de Toulouse-Lautrec y Mucha transformaron la publicidad
+          en un arte en sí mismo. Hoy es diseño editorial, dirección de arte,
+          estrategia, tipografía, color. La publicidad es, en el fondo, la forma
+          más antigua de narrativa breve que existe. Y tú lo sabes: por eso te
+          gusta. Porque entiendes que detrás de un buen anuncio hay un buen
+          relato.
+        </p>
+
+        <p>
+          Lo pienso a veces: si alguien hiciera un anuncio sobre ti, no habría
+          eslogan que te abarcara. Habría que mostrar tu risa, tu manera de
+          concentrarte cuando algo te interesa, la forma en que dices las cosas
+          cuando estás emocionada. <strong>Y aun así no alcanzaría.</strong>
+        </p>
+      </div>
+
+      <div class="historia-imagenes">
+
+        <div class="polaroid">
+          <img src="https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=600&q=80" alt="Pirámides de Egipto" loading="lazy">
+          <div class="texto">
+            Tebas, Egipto
+            <small>donde empezó todo</small>
+          </div>
+        </div>
+
+        <div class="polaroid">
+          <img src="https://i.pinimg.com/736x/57/44/af/5744af245cfc0dd609dedad3028d3148.jpg" alt="Publicidad moderna" loading="lazy">
+          <div class="texto">
+            Publicidad hoy
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="mensaje-anuncio">
+      <strong>Te amo:</strong> No lo digo a la ligera genuinamente te amo con todo mi corazon ya que eres todo para mi, eres mi amorcito, eres mi chiquita wonita, eres mi amor, eres mi vida, estoy genuinamente agradecido por tener el hermoso priviligio de ser tu novio. 
+      <br>
+      <strong> ¡Gracias mi reina hermosa te amoooooo!</strong>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CIERRE
+  ============================================================ -->
+  <footer class="cierre reveal">
+    <img class="gato-final" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyLFxZS9loF3MzVP2TEpESXA_aF4Cvj5hdrOPqqm1Pgw&s=10" alt="Gato negro" loading="lazy">
+    <h3>Fin del capítulo dos</h3>
+    <p>
+      Pero no de la historia. Porque las historias que importan son eternas
+    </p>
+    <p style="color: var(--amarillo); font-family: 'Caveat', cursive; font-size: 1.35rem; margin-top: 18px;">
+      Me haces feliz de una forma que no sabía que se podía.
+    </p>
+    <span class="corazon">❤</span><br>
+    <span class="firma-final">tuyo, en este capítulo y en los que vengan</span>
+  </footer>
+
+</div>
+
+<script>
+  /* ============================================================
+     CONTADOR DE DÍAS
+     Cambia la fecha de inicio por la vuestra.
+     Formato: new Date(AÑO, MES, DÍA)
+     OJO: el mes empieza en 0 (enero = 0, agosto = 7, octubre = 9)
+  ============================================================ */
+  const fechaInicio = new Date(2026, 7, 7); // 7 de agosto de 2026
+  const hoy = new Date();
+  const diferencia = Math.floor((hoy - fechaInicio) / (1000 * 60 * 60 * 24));
+  document.getElementById('dias').textContent = diferencia > 0 ? diferencia : 0;
+
+  /* ============================================================
+     ANIMACIÓN DE ENTRADA AL HACER SCROLL
+  ============================================================ */
+  const reveals = document.querySelectorAll('.reveal');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  reveals.forEach(el => observer.observe(el));
+
+  /* ============================================================
+     PARALAJE SUTIL EN LA CABECERA
+  ============================================================ */
+  const cabeceraFondo = document.querySelector('.cabecera-fondo');
+  if (cabeceraFondo) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      if (scrolled < 800) {
+        cabeceraFondo.style.transform = `translateY(${scrolled * 0.25}px)`;
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
